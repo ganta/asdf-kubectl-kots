@@ -20,9 +20,9 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for kubectl-kots.
 GH_REPO="https://github.com/replicatedhq/kots"
 TOOL_NAME="kubectl-kots"
+TOOL_DISPLAY_NAME="Replicated KOTS"
 TOOL_TEST="kubectl kots --help"
 
 fail() {
@@ -32,7 +32,6 @@ fail() {
 
 curl_opts=(-fsSL)
 
-# NOTE: You might want to remove this if kubectl-kots is not hosted on GitHub releases.
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
   curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
@@ -45,7 +44,7 @@ sort_versions() {
 list_github_tags() {
   git ls-remote --tags --refs "$GH_REPO" |
     grep -o 'refs/tags/.*' | cut -d/ -f3- |
-    sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+    sed 's/^v//'
 }
 
 list_all_versions() {
@@ -64,7 +63,7 @@ download_release() {
 
   url="$GH_REPO/releases/download/v${version}/kots_${platform}_${arch}.tar.gz"
 
-  echo "* Downloading $TOOL_NAME release $version..."
+  echo "* Downloading ${TOOL_DISPLAY_NAME} release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
@@ -78,18 +77,20 @@ install_version() {
   fi
 
   (
-    mkdir -p "$install_path"
-    cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+    mkdir -p "${install_path}"
+    cp -a "${ASDF_DOWNLOAD_PATH}"/* "${install_path}/"
 
-    # TODO: Asert kubectl-kots executable exists.
-    local tool_cmd
-    tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-    test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
+    mkdir -p "${install_path}/bin"
+    mv "${install_path}/kots" "${install_path}/bin/kubectl-kots" ||
+      fail "Expected ${install_path}/kots to exit."
 
-    echo "$TOOL_NAME $version installation was successful!"
+    test -x "${install_path}/bin/${TOOL_NAME}" ||
+      fail "Expected ${install_path}/bin/${TOOL_NAME} to be executable."
+
+    echo "${TOOL_DISPLAY_NAME} $version installation was successful!"
   ) || (
     rm -rf "$install_path"
-    fail "An error ocurred while installing $TOOL_NAME $version."
+    fail "An error ocurred while installing ${TOOL_DISPLAY_NAME} $version."
   )
 }
 
