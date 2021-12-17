@@ -49,18 +49,20 @@ list_github_tags() {
 }
 
 list_all_versions() {
-  # TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-  # Change this function if kubectl-kots has other means of determining installable versions.
-  list_github_tags
+  list_github_tags |
+    grep -v -- "-nightly" |
+    grep -v -- "-beta"
 }
 
 download_release() {
-  local version filename url
-  version="$1"
-  filename="$2"
+  local version="$1"
+  local filename="$2"
+  local platform arch url
 
-  # TODO: Adapt the release URL convention for kubectl-kots
-  url="$GH_REPO/archive/v${version}.tar.gz"
+  platform="$(get_platform)"
+  arch="$(get_arch)"
+
+  url="$GH_REPO/releases/download/v${version}/kots_${platform}_${arch}.tar.gz"
 
   echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -89,4 +91,24 @@ install_version() {
     rm -rf "$install_path"
     fail "An error ocurred while installing $TOOL_NAME $version."
   )
+}
+
+get_platform() {
+  local platform
+
+  platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+  echo -n "${platform}"
+}
+
+get_arch() {
+  local arch
+
+  arch="$(uname -m)"
+
+  if [[ ${arch} == "x86_64" ]]; then
+    arch="amd64"
+  fi
+
+  echo -n "${arch}"
 }
