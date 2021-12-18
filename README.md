@@ -1,32 +1,18 @@
-<div align="center">
+# asdf-kubectl-kots
 
-# asdf-kubectl-kots [![Build](https://github.com/ganta/asdf-kubectl-kots/actions/workflows/build.yml/badge.svg)](https://github.com/ganta/asdf-kubectl-kots/actions/workflows/build.yml) [![Lint](https://github.com/ganta/asdf-kubectl-kots/actions/workflows/lint.yml/badge.svg)](https://github.com/ganta/asdf-kubectl-kots/actions/workflows/lint.yml)
+[![Build](https://github.com/ganta/asdf-kubectl-kots/actions/workflows/build.yml/badge.svg)](https://github.com/ganta/asdf-kubectl-kots/actions/workflows/build.yml) [![Lint](https://github.com/ganta/asdf-kubectl-kots/actions/workflows/lint.yml/badge.svg)](https://github.com/ganta/asdf-kubectl-kots/actions/workflows/lint.yml)
 
-
-[kubectl-kots](https://kots.io/) plugin for the [asdf version manager](https://asdf-vm.com).
-
-</div>
-
-# Contents
-
-- [Dependencies](#dependencies)
-- [Install](#install)
-- [Why?](#why)
-- [Contributing](#contributing)
-- [License](#license)
+[Replicated KOTS](https://kots.io/) plugin for the [asdf version manager](https://asdf-vm.com).
 
 # Dependencies
 
 - `bash`, `curl`, `tar`: generic POSIX utilities.
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
 
 # Install
 
 Plugin:
 
 ```shell
-asdf plugin add kubectl-kots
-# or
 asdf plugin add kubectl-kots https://github.com/ganta/asdf-kubectl-kots.git
 ```
 
@@ -43,7 +29,7 @@ asdf install kubectl-kots latest
 asdf global kubectl-kots latest
 
 # Now kubectl-kots commands are available
-kubectl kots --help
+kubectl kots version
 ```
 
 Check [asdf](https://github.com/asdf-vm/asdf) readme for more instructions on how to
