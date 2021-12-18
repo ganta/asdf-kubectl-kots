@@ -23,7 +23,6 @@ set -euo pipefail
 GH_REPO="https://github.com/replicatedhq/kots"
 TOOL_NAME="kubectl-kots"
 TOOL_DISPLAY_NAME="Replicated KOTS"
-TOOL_TEST="kubectl kots --help"
 
 fail() {
   echo -e "asdf-$TOOL_NAME: $*"
