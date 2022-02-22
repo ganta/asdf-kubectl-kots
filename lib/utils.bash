@@ -60,6 +60,15 @@ download_release() {
   platform="$(get_platform)"
   arch="$(get_arch)"
 
+  # KOTS v1.59.2 and later are macOS universal binaries, and the archive name has been changed.
+  if [[ ${platform} == "darwin" ]]; then
+    if compare_version_greater_than_or_equal_to "${version}" "1.59.2"; then
+      arch="all"
+    else
+      arch="amd64"
+    fi
+  fi
+
   url="${GH_REPO}/releases/download/v${version}/kots_${platform}_${arch}.tar.gz"
 
   echo "* Downloading ${TOOL_DISPLAY_NAME} release $version..."
@@ -111,4 +120,21 @@ get_arch() {
   fi
 
   echo -n "${arch}"
+}
+
+compare_version_greater_than_or_equal_to() {
+  local version_a="$1"
+  local version_b="$2"
+
+  if [[ ${version_a} == "${version_b}" ]]; then
+    return 0
+  fi
+
+  older_version=$(printf "%s\n%s" "${version_a}" "${version_b}" | sort_versions | head -1)
+
+  if [[ ${older_version} == "${version_b}" ]]; then
+    return 0
+  else
+    return 1
+  fi
 }
