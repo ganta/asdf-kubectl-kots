@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://www.github.com/ganta/asdf-kubectl-kots/compare/v1.0.0...v1.1.0) (2022-02-22)
+
+
+### Features
+
+* Support macOS universal binary archive ([c96fb64](https://www.github.com/ganta/asdf-kubectl-kots/commit/c96fb641bdf3ab5548e6a7b59240fc4330ba8869))
+
 ## 1.0.0 (2021-12-18)
 
 
