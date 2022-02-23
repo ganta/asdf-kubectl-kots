@@ -13,7 +13,7 @@
 Plugin:
 
 ```shell
-asdf plugin add kubectl-kots https://github.com/ganta/asdf-kubectl-kots.git
+asdf plugin add kubectl-kots
 ```
 
 kubectl-kots:
